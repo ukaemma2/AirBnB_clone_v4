@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Starts a Flash Web Application """
+""" script that starts a Flask Web Application """
 import uuid
 from models import storage
 from models.state import State
@@ -15,13 +15,13 @@ app = Flask(__name__)
 
 @app.teardown_appcontext
 def close_db(error):
-    """ Remove the current SQLAlchemy Session """
+    """ Remove the active SQLAlchemy Session """
     storage.close()
 
 
-@app.route('/0-hbnb', strict_slashes=False)
+@app.route('/101-hbnb/', strict_slashes=False)
 def hbnb():
-    """ HBNB is alive! """
+    """ HBNB is live """
     states = storage.all(State).values()
     states = sorted(states, key=lambda k: k.name)
     st_ct = []
@@ -35,13 +35,11 @@ def hbnb():
     places = storage.all(Place).values()
     places = sorted(places, key=lambda k: k.name)
 
-    return render_template('0-hbnb.html',
+    return render_template('101-hbnb.html',
                            states=st_ct,
                            amenities=amenities,
-                           places=places,
-                           cache_id=uuid.uuid4())
+                           places=places, cache_id=uuid.uuid4())
 
 
 if __name__ == "__main__":
-    """ Main Function """
     app.run(host='0.0.0.0', port=5000)
